@@ -25,12 +25,12 @@ import sys
 import pylab as pyl
 from matplotlib import gridspec
 from scipy import interpolate as interp
-import bgFinder
+from . import bgFinder
 
 from astropy.visualization import interval
 from stsci import numdisplay
 
-from trippy_utils import expand2d,line
+from .trippy_utils import expand2d,line
 
 
 
@@ -70,7 +70,7 @@ class pillPhot:
         """
         Return round aperture correction at radius r interpolated from values computed in computeRoundAperCorrFromSource.
         """
-        if self.aperFunc<>None:
+        if self.aperFunc!=None:
             return self.aperFunc(r)-num.min(self.aperMags)
         else:
             raise Exception('Need to call computeRoundAperCorrFromSource first')
@@ -134,12 +134,12 @@ class pillPhot:
         self.dmagnitude=(2.5/num.log(10.))*(1./self.snr)
 
         if verbose:
-            print "   SNR: %s"%(self.snr)
-            print "   Flux: %s"%(self.sourceFlux)
-            print "   Background: %s"%(self.bg)
-            print "   Background STD: %s"%(self.bgstd)
-            print "   Num Pixels : %s"%(self.nPix)
-            print
+            print("   SNR: %s"%(self.snr))
+            print("   Flux: %s"%(self.sourceFlux))
+            print("   Background: %s"%(self.bg))
+            print("   Background STD: %s"%(self.bgstd))
+            print("   Num Pixels : %s"%(self.nPix))
+            print()
 
     def __call__(self,xi,yi,radius=4.,l=5.,a=0.01,width=20.,skyRadius=8.,zpt=27.0,exptime=1.,
                  enableBGSelection=False, display=False,
@@ -235,7 +235,7 @@ class pillPhot:
                                          w=int(width)))
                 mask.append(self.mask)
 
-        if display and self.l0<>None:
+        if display and self.l0!=None:
             l0 = self.l0
             l1 = self.l1
             l2 = self.l2
@@ -263,7 +263,7 @@ class pillPhot:
                     if n==self.repFact*self.repFact:
                         rebinnedSkyImage[ii/self.repFact,jj/self.repFact] = num.sum(skyImage[ii:ii+self.repFact, jj:jj+self.repFact])
 
-            w = num.where(rebinnedSkyImage<>0.0)
+            w = num.where(rebinnedSkyImage!=0.0)
             bgf = bgFinder.bgFinder(rebinnedSkyImage[w])
             if display and enableBGSelection:
                 bgf.plotAxis = self.dispFig.add_subplot(self.dispGS[1])
@@ -343,7 +343,7 @@ class pillPhot:
                 self.dispAx.plot(mx1 + semiCircX, my1 + semiCircY, 'w-', lw=2)
 
             if enableBGSelection:
-                print 'Current background value: %.3f'%(self.bg)
+                print('Current background value: %.3f'%(self.bg))
                 self.dispAx.set_title('To improve background measurement, zoom on\na good background region, then close.')
 
                 (ox0,ox1) = self.dispAx.get_xlim()
@@ -378,7 +378,7 @@ class pillPhot:
                 y1 = min(A,y1)/self.repFact
 
                 rebinnedSkyImage = rebinnedSkyImage[int(y0):int(y1), int(x0):int(x1)]
-                w = num.where(rebinnedSkyImage<>0.0)
+                w = num.where(rebinnedSkyImage!=0.0)
                 bgf = bgFinder.bgFinder(rebinnedSkyImage[w])
                 bg = bgf.smartBackground(display=False, backupMode=backupMode, forceBackupMode = forceBackupMode)
                 bgstd = num.std(rebinnedSkyImage[w])
@@ -404,7 +404,7 @@ class pillPhot:
                 self.bgSamplingRegion = [x0,x1,y0,y1]
 
             else: pyl.show()
-        if verbose: print num.sum(image),self.sourceFlux,self.bg,zpt-2.5*num.log10(flux)
+        if verbose: print(num.sum(image),self.sourceFlux,self.bg,zpt-2.5*num.log10(flux))
 
 
     #helper functions to enable zoom and histogram updating
@@ -425,7 +425,7 @@ class pillPhot:
 
         #print x0,x1,y0,y1
         junk = self._rbsi[int(y0):int(y1),int(x0):int(x1)]
-        w = num.where(junk<>0)
+        w = num.where(junk!=0)
         self._bgFind.plotAxis.cla()
         self._bgFind.data = junk[w]
         self._event_background = self._bgFind.smartBackground(display=False, backupMode=self._bgm, forceBackupMode=self._fbgm)
@@ -563,8 +563,8 @@ def bgselect(event):
     I don't think this is actually used. Haven't confirmed yet.
     """
     global CA
-    print CA.get_xlim()
-    print CA.get_ylim()
+    print(CA.get_xlim())
+    print(CA.get_ylim())
 
 
 
@@ -573,7 +573,7 @@ if __name__=="__main__":
     import pylab as pyl
     psfNoLine=modelPSF(num.arange(25),num.arange(25),alpha=1.5,beta=2.0,repFact=10)
     psfNoLine.writeto('noline.fits')
-    print
+    print()
     psfLine=modelPSF(num.arange(25),num.arange(25),alpha=1.5,beta=2.0,repFact=10)
     psfLine.line(4.0,32.,0.45)
     psfLine.writeto('line.fits')

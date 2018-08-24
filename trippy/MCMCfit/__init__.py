@@ -1,1 +1,1 @@
-from MCMCfit import *
+from .MCMCfit import *

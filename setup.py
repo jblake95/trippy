@@ -2,11 +2,11 @@
 
 from setuptools import setup
 import sys
-
+"""
 if sys.version_info[0] > 2:
-    print 'trippy is only compatible with Python version 2.7+, not yet 3.x'
+    print('trippy is only compatible with Python version 2.7+, not yet 3.x')
     sys.exit(-1)
-
+"""
 dependencies = ['numpy >= 1.6.1',
                 'scipy',
                 'matplotlib',

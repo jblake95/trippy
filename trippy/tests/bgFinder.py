@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals, print_function
+
 from mock import (MagicMock, patch, )
 from unittest import TestCase
 from numpy import array
@@ -149,7 +149,7 @@ class TestBGFinder(TestCase):
 
     def test_ahist(self):
         b = self.create_finder()
-        data = array(range(0, 255), int)
+        data = array(list(range(0, 255)), int)
         r = b._ahist(data, 50)
 
         self.assertEqual(50, len(r[0]))
@@ -157,7 +157,7 @@ class TestBGFinder(TestCase):
         self.assertEqual(3, r[2])
 
     def test_stats(self):
-        data = array(range(0, 255), int)
+        data = array(list(range(0, 255)), int)
         b = bgFinder(data)
         r = b._stats()
 
@@ -166,14 +166,14 @@ class TestBGFinder(TestCase):
 
     def test_under_fraserMode(self):
         'Test ``bgFinder._fraserMode``'
-        data = array(range(0, 255), int)
+        data = array(list(range(0, 255)), int)
         b = bgFinder(data)
         r = b._fraserMode()
 
         self.assertAlmostEqual(4.5, r, places=1)
 
     def test_gaussFit(self):
-        data = array(range(0, 255), int)
+        data = array(list(range(0, 255)), int)
         b = bgFinder(data)
         r = b._gaussFit()
 
@@ -182,7 +182,7 @@ class TestBGFinder(TestCase):
         self.assertAlmostEqual(73.61159329, b.gauss[1], places=1)
 
     def test_gaussLike(self):
-        data = array(range(0, 255), int)
+        data = array(list(range(0, 255)), int)
         b = bgFinder(data)
         r = b._gaussLike([1.0, 2.0])
 

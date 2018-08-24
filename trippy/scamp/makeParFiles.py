@@ -25,7 +25,7 @@ def outFile(name,strings):
     if not osp.isfile(name):
         han=open(name,'w+')
         for i in range(len(strings)):
-            print >>han,strings[i]
+            print(strings[i], file=han)
         han.close()
     return
 
@@ -222,7 +222,7 @@ def writeSex(fileName='def.sex',paramFileName='def.param',minArea=20, threshold=
     """
 
     if type(aperture) not in [type(1),type([1]),type(1.)]:
-        print 'Aperture can only be an integer, floating point, or LIST of those. A Numpy array will cause a failure here.'
+        print('Aperture can only be an integer, floating point, or LIST of those. A Numpy array will cause a failure here.')
         raise TypeError
     if type(aperture)==type([1]):
         aperString=''
@@ -232,10 +232,10 @@ def writeSex(fileName='def.sex',paramFileName='def.param',minArea=20, threshold=
     else:
         aperString=str(aperture)
 
-    if catalogType<>'FITS_LDAC' and catalogType<>'ASCII':
+    if catalogType!='FITS_LDAC' and catalogType!='ASCII':
         import sys
-        print catalogType
-        print 'Error: type should be either ASCII or FITS_LDAC'
+        print(catalogType)
+        print('Error: type should be either ASCII or FITS_LDAC')
         raise TypeError
         sys.exit()
 

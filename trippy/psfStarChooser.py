@@ -20,7 +20,7 @@ __author__ = 'Wesley Fraser (@wtfastro, github: fraserw <westhefras@gmail.com>),
 
 
 import numpy as np
-import psf
+from . import psf
 import pylab as pyl
 from astropy.visualization import interval
 from stsci import numdisplay
@@ -101,8 +101,8 @@ class starChooser:
         self.goodStars = []
         self.starsScat = None
 
-        print 'Fitting stars with moffat profiles...'
-        print '      X         Y    chi    a     b    FWHM'
+        print('Fitting stars with moffat profiles...')
+        print('      X         Y    chi    a     b    FWHM')
 
 
         for j in range(len(self.XWIN_IMAGE)):
@@ -120,7 +120,7 @@ class starChooser:
                 #norm=Im.normalise(mpsf.subsec,[self.z1,self.z2])
                 norm=self.normer(mpsf.subSec)
                 if (fwhm is not None) and not (np.isnan(mpsf.beta) or np.isnan(mpsf.alpha)):
-                    print '   {: 8.2f} {: 8.2f} {:3.2f} {: 5.2f} {: 5.2f} {: 5.2f} '.format(self.XWIN_IMAGE[j],self.YWIN_IMAGE[j],mpsf.chiFluxNorm,mpsf.alpha,mpsf.beta,fwhm)
+                    print('   {: 8.2f} {: 8.2f} {:3.2f} {: 5.2f} {: 5.2f} {: 5.2f} '.format(self.XWIN_IMAGE[j],self.YWIN_IMAGE[j],mpsf.chiFluxNorm,mpsf.alpha,mpsf.beta,fwhm))
 
                     self.subsecs.append(norm*1.)
                     self.goodStars.append(True)
@@ -139,7 +139,7 @@ class starChooser:
         FWHM_mode_width = 1.0 #could be 0.5 just as well
         ab_std_width = 2.0
         if autoTrim:
-            print '\nDoing auto star selection.'
+            print('\nDoing auto star selection.')
             #first use Frasermode on the distribution of FWHM to get a good handle on the true FWHM of stars
             #select only those stars with FWHM of +-1 pixel of the mode.
             bg = bgFinder.bgFinder(self.points[:,0])
@@ -253,7 +253,7 @@ class starChooser:
         self.psfPlotLimits=newLim[:]
         w = np.where((self.points[:,0]>=self.psfPlotLimits[0][0])&(self.points[:,0]<=self.psfPlotLimits[0][1])&(self.points[:,1]>=self.psfPlotLimits[1][0])&(self.points[:,1]<=self.psfPlotLimits[1][1]))[0]
 
-        if self.starsScat<>None:
+        if self.starsScat!=None:
             self.starsScat.remove()
             self.starsScat=None
 
@@ -324,7 +324,7 @@ class starChooser:
         arg = args[np.argsort(pointsshowing[:, 0])[self.selected_star]]
 
         ca=pyl.gca()
-        if self.starsScat<>None:
+        if self.starsScat!=None:
             self.starsScat.remove()
             self.starsScat=None
 
@@ -383,7 +383,7 @@ class starChooser:
             me=event.mouseevent
 
 
-        if self.starsScat<>None:
+        if self.starsScat!=None:
             self.starsScat.remove()
             self.starsScat=None
 
@@ -455,8 +455,8 @@ class starChooser:
         self.goodStars = []
         self.starsScat = None
 
-        print 'Fitting stars with moffat profiles...'
-        print '   X        Y     Alpha  Beta  FWHM'
+        print('Fitting stars with moffat profiles...')
+        print('   X        Y     Alpha  Beta  FWHM')
 
         for j in range(25):#len(self.XWIN_IMAGE)):
             if self.FLUX_AUTO[j]/self.FLUXERR_AUTO[j]>self.moffatSNR:
@@ -475,7 +475,7 @@ class starChooser:
                 #norm=Im.normalise(mpsf.subsec,[self.z1,self.z2])
                 norm=self.normer(mpsf.subSec)
                 if (fwhm is not None) and not (np.isnan(mpsf.beta) or np.isnan(mpsf.alpha)):
-                    print '{: 8.2f} {: 8.2f} {: 5.2f} {: 5.2f} {: 5.2f}'.format(self.XWIN_IMAGE[j],self.YWIN_IMAGE[j],mpsf.alpha,mpsf.beta,fwhm)
+                    print('{: 8.2f} {: 8.2f} {: 5.2f} {: 5.2f} {: 5.2f}'.format(self.XWIN_IMAGE[j],self.YWIN_IMAGE[j],mpsf.alpha,mpsf.beta,fwhm))
 
                     self.subsecs.append(norm*1.)
                     self.goodStars.append(True)
@@ -497,10 +497,10 @@ class starChooser:
 
         while nc<15:
             cutter = np.arange(len(self.points))
-            print 'Cut ',nc
+            print('Cut ',nc)
 
             median_points = np.median(self.points, axis = 0)
-            print median_points
+            print(median_points)
 
             aa=int(2*5*median_points[0])+1
             if aa%2==0: aa+=1
@@ -521,8 +521,8 @@ class starChooser:
 
             (AA,BB) = cutouts[0].shape
             v = np.abs(diffs)/plants**0.5
-            print v.shape
-            print np.argmax(v[:,0,0])
+            print(v.shape)
+            print(np.argmax(v[:,0,0]))
 
             args = np.argmax(np.abs(diffs)/plants**0.5,axis = 0)
             #args_min = np.argmax(diffs**2/plants,axis = 0)
@@ -546,14 +546,14 @@ class starChooser:
                 pyl.imshow(norm,interpolation = 'nearest',cmap='gray', origin='lower')
                 pyl.scatter(np.array(w[1])+int(BB/2-1.5*fwhm),np.array(w[0])+int(AA/2-1.5*fwhm),marker='.',color='r')#,s=2)
                 pyl.title(nBadPix[ii])
-            print
+            print()
             pyl.show()
 
             arg = np.argmax(nBadPix)
-            print 'Cutting star {}'.format(arg)
+            print('Cutting star {}'.format(arg))
             cutter = np.delete(cutter,arg)
-            print np.median(nBadPix[cutter]),np.std(nBadPix[cutter]),np.max(nBadPix[cutter])
-            print
+            print(np.median(nBadPix[cutter]),np.std(nBadPix[cutter]),np.max(nBadPix[cutter]))
+            print()
 
             #now cut out all those with bad edges
             if nc == 0:
@@ -561,14 +561,14 @@ class starChooser:
                     w = np.where(diffs[cutter[kk]]==0.0)
                     if len(w[0]>5):
                         cutter = np.delete(cutter,kk)
-                        print 'Nuked ',kk
+                        print('Nuked ',kk)
 
             self.points = self.points[cutter]
             self.goodStars = self.goodStars[cutter]
             nc+=1
 
         exit()
-        print "Removing sources..."
+        print("Removing sources...")
         xxx = []
         yyy = []
         for ii in range(len(cxs)):
@@ -582,7 +582,7 @@ class starChooser:
             rough_chi = np.sum(d**2/np.abs(cutouts[ii]))
             xxx.append(rough_chi)
             yyy.append(np.sum(d))
-            print cxs[ii],cys[ii],amps[ii],rough_chi
+            print(cxs[ii],cys[ii],amps[ii],rough_chi)
             #pyl.imshow(d,interpolation = 'nearest',cmap='gray', vmin=m-s, vmax=m+s, origin='lower')
             #pyl.title(np.max(np.abs(d)))
             #pyl.show()

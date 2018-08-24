@@ -1,3 +1,3 @@
 __all__=['makeParFiles']
-import makeParFiles
-from scamp import *
+from . import makeParFiles
+from .scamp import *
